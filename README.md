@@ -1,6 +1,8 @@
 # nuclio-custom-react-hooks
 Source code of custom react hooks masterclass at [Nuclio Digital School](https://nuclio.school/?lang=en).
 
+![preview](https://i.imgur.com/6QV9vJi.gif)
+
 ## Setup
 
 ```shell script
