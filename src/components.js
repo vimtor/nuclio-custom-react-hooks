@@ -4,9 +4,9 @@ export const TaskList = ({ children }) => (
     <ul>{children}</ul>
 )
 
-export const TaskItem = ({ title, onRemove }) => (
+export const TaskItem = ({ title, completed, onRemove }) => (
     <li>
-        <input type="checkbox"/>
+        <input type="checkbox" checked={completed}/>
         <p>{title}</p>
         <span onClick={onRemove}>X</span>
     </li>
@@ -19,10 +19,10 @@ export const Input = ({ onSubmit, onChange, value }) => (
 )
 
 export const Controls = ({ onLoad, tasks }) => (
-    <>
+    <footer>
+        <div>
+            <strong>{tasks.filter((task) => !task.completed).length}</strong> tasks left.
+        </div>
         <button onClick={onLoad}>Load More</button>
-        <footer>
-            <strong>{tasks.filter((task) => !task.checked).length}</strong> tasks left.
-        </footer>
-    </>
+    </footer>
 );

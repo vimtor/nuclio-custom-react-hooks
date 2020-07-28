@@ -21,6 +21,7 @@ yarn start
 
 ## Improvements
 
+- [ ] Add check feature with its according update request
 - [ ] Use axios' [instances](https://github.com/axios/axios#creating-an-instance) to clean up requests
 - [ ] Do proper error checking on request
 - [ ] Trust the request and rollback if they don't succeed
@@ -30,12 +31,12 @@ That way we can make our components more isolated. Going from this:
 
 ```jsx
 export const Controls = ({ onLoad, tasks }) => (
-    <>
+    <footer>
+        <div>
+            <strong>{tasks.filter((task) => !task.completed).length}</strong> tasks left.
+        </div>
         <button onClick={onLoad}>Load More</button>
-        <footer>
-            <strong>{tasks.filter((task) => !task.checked).length}</strong> tasks left.
-        </footer>
-    </>
+    </footer>
 );
 ```
 
@@ -46,12 +47,12 @@ export const Controls = () => {
     const { tasks, loadMore } = useTasks();
 
     return (
-        <>
+        <footer>
+            <div>
+                <strong>{tasks.filter((task) => !task.completed).length}</strong> tasks left.
+            </div>
             <button onClick={loadMore}>Load More</button>
-            <footer>
-                <strong>{tasks.filter((task) => !task.checked).length}</strong> tasks left.
-            </footer>
-        </>
+        </footer>
     );
 };
 ```

@@ -5,12 +5,12 @@ import { v4 as uuid } from 'uuid'
 const API_HOST = 'https://jsonplaceholder.typicode.com';
 const API_TODO = `${API_HOST}/todos`;
 
-export const useTasks = ({ offset }) => {
+export const useTasks = ({ offset = 5 }) => {
     const [tasks, setTasks] = useState([]);
     const [page, setPage] = useState(offset);
 
     useEffect(() => {
-        axios.get(`${API_TODO}?_start=${0}&_limit=${page}`)
+        axios.get(`${API_TODO}?_start=${0}&_limit=${offset}`)
             .then(({ data, status }) => {
                 if (status === 200) {
                     setTasks(data);
@@ -18,18 +18,18 @@ export const useTasks = ({ offset }) => {
             })
             .catch(console.error)
 
-    }, []);
+    }, [offset]);
 
     const addTask = async (title) => {
         const data = {
-            title,
             id: uuid(),
+            title,
             completed: false
         }
 
         await axios.post(API_TODO, data);
 
-        setTasks([data, ...tasks]);
+        setTasks([...tasks, data]);
     }
 
     const removeTask = async (id) => {
@@ -39,7 +39,7 @@ export const useTasks = ({ offset }) => {
     }
 
     const loadMore = async () => {
-        const { data } = await axios.get(`${API_TODO}?_start=${page}&_limit=${page}`)
+        const { data } = await axios.get(`${API_TODO}?_start=${page}&_limit=${offset}`)
 
         setPage(page + offset);
         setTasks([...tasks, ...data]);
