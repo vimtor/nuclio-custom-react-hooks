@@ -19,7 +19,7 @@ yarn start
 - If your custom hook doesn't use the built-in hooks, it is probably a function, not a hook.
 - We can use libraries like [axios](https://www.npmjs.com/package/axios) for making fetching easier
 
-## Improvements
+## Tasks
 
 - [ ] Add check feature with its according update request
 - [ ] Use axios' [instances](https://github.com/axios/axios#creating-an-instance) to clean up requests
