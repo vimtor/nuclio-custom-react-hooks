@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import {useTasks} from "./hooks";
+import React, { useState } from 'react';
+import { useTasks } from "./hooks";
+import { Input, TaskItem, TaskList, Controls } from "./components";
 
 const App = () => {
-    const { tasks, addTask, removeTask } = useTasks();
+    const { tasks, addTask, removeTask, loadMore } = useTasks({ offset: 5 });
     const [title, setTitle] = useState('');
 
     const handleSubmit = (event) => {
@@ -14,21 +15,13 @@ const App = () => {
     return (
         <div>
             <h1>What do you want to do today?</h1>
-            <form onSubmit={handleSubmit}>
-                <input placeholder="buy milk" onChange={e => setTitle(e.target.value)} value={title} />
-            </form>
-            <ul>
+            <Input onSubmit={handleSubmit} onChange={setTitle} value={title} />
+            <TaskList>
                 {tasks.map(({ id, title }) => (
-                    <li key={id}>
-                        <input type="checkbox" />
-                        <p>{title}</p>
-                        <button onClick={() => removeTask(id)}>X</button>
-                    </li>
+                    <TaskItem key={id} title={title} onRemove={() => removeTask(id)}/>
                 ))}
-            </ul>
-            <footer>
-                <strong>{tasks.filter((task) => !task.checked).length}</strong> tasks left.
-            </footer>
+            </TaskList>
+            <Controls onLoad={loadMore} tasks={tasks} />
         </div>
     );
 };
