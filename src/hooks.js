@@ -35,7 +35,13 @@ export const useTasks = ({ offset = 5 }) => {
     };
 
     const loadMore = async () => {
-        const { data } = await axios.get(API_TODO + `?_start=${page + offset}&_limit=${offset}`);
+        const { data } = await axios.get(API_TODO, {
+            params: {
+                _start: page + offset,
+                _limit: offset,
+            }
+        });
+
         setTasks([...tasks, ...data])
         setPage(page + 5);
     };
