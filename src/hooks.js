@@ -1,12 +1,46 @@
-import { useEffect, useState } from "react";
+import React from 'react';
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import { v4 } from "uuid";
 
+const TaskContext = createContext(null);
+
+const reducer = (tasks, action) => {
+    switch (action.type) {
+        case 'SET':
+            return action.payload;
+        case 'ADD':
+            if (Array.isArray(action.payload)) {
+                return [...tasks, ...action.payload];
+            }
+            return [...tasks, action.payload];
+        case 'REMOVE':
+            return tasks.filter((task) => task.id !== action.payload)
+
+    }
+}
+
+const TaskProvider = ({ children }) => {
+    const [tasks, dispatch] = useReducer(reducer, []);
+
+    return (
+        <TaskContext.Provider value={[tasks, dispatch]}>
+            {children}
+        </TaskContext.Provider>
+    )
+}
+
 const API_TODO = 'https://jsonplaceholder.typicode.com/todos';
 
-export const useTasks = ({ offset = 5 }) => {
-    const [tasks, setTasks] = useState([]);
+const useTasks = ({ offset } = { offset: 5 }) => {
+    const context = useContext(TaskContext);
     const [page, setPage] = useState(0);
+
+    if (!context) {
+        throw new Error('useTasks must be used within TaskProvider')
+    }
+
+    const [tasks, dispatch] = context;
 
     useEffect(() => {
         axios.get(API_TODO, {
@@ -15,7 +49,7 @@ export const useTasks = ({ offset = 5 }) => {
                 _limit: offset,
             }
         })
-        .then(res => setTasks(res.data));
+            .then(({ data }) => dispatch({ type: 'SET', payload: data }));
     }, []);
 
     const addTask = async (title) => {
@@ -26,12 +60,12 @@ export const useTasks = ({ offset = 5 }) => {
         }
 
         await axios.post(API_TODO, data)
-        setTasks([...tasks, data])
+        dispatch({ type: 'ADD', payload: data })
     };
 
     const removeTask = async (id) => {
         await axios.delete(`${API_TODO}/${id}`);
-        setTasks(tasks.filter((task) => task.id !== id));
+        dispatch({ type: 'REMOVE', payload: id })
     };
 
     const loadMore = async () => {
@@ -42,8 +76,8 @@ export const useTasks = ({ offset = 5 }) => {
             }
         });
 
-        setTasks([...tasks, ...data])
         setPage(page + 5);
+        dispatch({ type: 'ADD', payload: data })
     };
 
     return {
@@ -53,3 +87,6 @@ export const useTasks = ({ offset = 5 }) => {
         loadMore
     }
 };
+
+export { useTasks };
+export default TaskProvider;

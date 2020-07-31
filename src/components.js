@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTasks } from "./hooks";
 
 export const TaskList = ({ children }) => (
     <ul>{children}</ul>
@@ -26,11 +27,15 @@ export const Input = ({ onSubmit }) => {
     );
 }
 
-export const Controls = ({ onLoad, tasks }) => (
-    <footer>
-        <div>
-            <strong>{tasks.filter((task) => !task.completed).length}</strong> tasks left.
-        </div>
-        <button onClick={onLoad}>Load More</button>
-    </footer>
-);
+export const Controls = () => {
+    const { tasks, loadMore } = useTasks();
+
+    return (
+        <footer>
+            <div>
+                <strong>{tasks.filter((task) => !task.completed).length}</strong> tasks left.
+            </div>
+            <button onClick={loadMore}>Load More</button>
+        </footer>
+    );
+};
