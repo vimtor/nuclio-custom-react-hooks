@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { v4 }  from "uuid";
+import { v4 } from "uuid";
 
 const API_TODO = 'https://jsonplaceholder.typicode.com/todos';
 
@@ -9,8 +9,8 @@ export const useTasks = ({ offset = 5 }) => {
     const [page, setPage] = useState(0);
 
     useEffect(() => {
-        axios.get(API_TODO + `?_start=${page}&_limit=${offset}`).then(res => setTasks(res.data));
-    }, [page, offset]);
+        axios.get(API_TODO, { params: { _start: page, _limit: offset } }).then(res => setTasks(res.data));
+    }, []);
 
     const addTask = async (title) => {
         const data = {
