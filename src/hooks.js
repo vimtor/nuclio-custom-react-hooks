@@ -29,7 +29,7 @@ export const useTasks = ({ offset = 5 }) => {
     };
 
     const loadMore = async () => {
-        const { data } = await api.get('/todos', {
+        const { data } = await axios.get(API_TODO, {
             params: {
                 _start: page + offset,
                 _limit: offset,
