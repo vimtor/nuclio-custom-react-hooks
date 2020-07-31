@@ -15,7 +15,15 @@ export const useTasks = ({ offset = 5 }) => {
                 _limit: offset,
             }
         })
-        .then(res => setTasks(res.data));
+            .then(({ data, status }) => {
+                if (status === 200) {
+                    setTasks(data);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                // Show error popup
+            })
     }, []);
 
     const addTask = async (title) => {
@@ -25,25 +33,33 @@ export const useTasks = ({ offset = 5 }) => {
             completed: false
         }
 
-        await axios.post(API_TODO, data)
-        setTasks([...tasks, data])
+        const { status } = await axios.post(API_TODO, data)
+
+        if (status === 201) {
+            setTasks([...tasks, data])
+        }
     };
 
     const removeTask = async (id) => {
-        await axios.delete(`${API_TODO}/${id}`);
-        setTasks(tasks.filter((task) => task.id !== id));
+        const { status } = await axios.delete(`${API_TODO}/${id}`);
+
+        if (status === 200) {
+            setTasks(tasks.filter((task) => task.id !== id));
+        }
     };
 
     const loadMore = async () => {
-        const { data } = await axios.get(API_TODO, {
+        const { data, status } = await axios.get(API_TODO, {
             params: {
                 _start: page + offset,
                 _limit: offset,
             }
         });
 
-        setTasks([...tasks, ...data])
-        setPage(page + 5);
+        if (status === 200) {
+            setTasks([...tasks, ...data])
+            setPage(page + 5);
+        }
     };
 
     return {
