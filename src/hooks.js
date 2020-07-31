@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 
 const API_TODO = 'https://jsonplaceholder.typicode.com/todos';
 
-export const useTasks = ({ offset = 5 }) => {
+export const useTasks = ({ offset } = { offset: 5 }) => {
     const [tasks, setTasks] = useState([]);
     const [page, setPage] = useState(0);
 
