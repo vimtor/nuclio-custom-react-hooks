@@ -10,7 +10,7 @@ export const useTasks = ({ offset = 5 }) => {
 
     useEffect(() => {
         axios.get(API_TODO + `?_start=${page}&_limit=${offset}`).then(res => setTasks(res.data));
-    }, [offset]);
+    }, [page, offset]);
 
     const addTask = async (title) => {
         const data = {
