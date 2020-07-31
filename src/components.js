@@ -4,9 +4,9 @@ export const TaskList = ({ children }) => (
     <ul>{children}</ul>
 )
 
-export const TaskItem = ({ title, completed, onRemove }) => (
+export const TaskItem = ({ title, completed, onRemove, onCheck }) => (
     <li>
-        <input type="checkbox" checked={completed} />
+        <input type="checkbox" checked={completed} onClick={onCheck} />
         <p>{title}</p>
         <span onClick={onRemove}>X</span>
     </li>

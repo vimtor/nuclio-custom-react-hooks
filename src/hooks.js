@@ -10,7 +10,7 @@ export const useTasks = ({ offset = 5 }) => {
 
     useEffect(() => {
         axios.get(API_TODO + `?_start=${page}&_limit=${offset}`).then(res => setTasks(res.data));
-    }, [offset]);
+    }, [page, offset]);
 
     const addTask = async (title) => {
         const data = {
@@ -34,10 +34,23 @@ export const useTasks = ({ offset = 5 }) => {
         setPage(page + 5);
     };
 
+    const toggleTask = async (id) => {
+        const index = tasks.findIndex(task => task.id === id);
+        const completed = !tasks[index].completed;
+
+        await axios.put(`${API_TODO}/${id}`, { completed });
+
+        const newTasks = [...tasks];
+        newTasks[index] = { ...newTasks[index], completed }
+        setTasks(newTasks);
+    };
+
+
     return {
         tasks,
         addTask,
         removeTask,
-        loadMore
+        loadMore,
+        toggleTask
     }
 };
