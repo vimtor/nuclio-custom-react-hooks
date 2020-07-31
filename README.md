@@ -23,11 +23,13 @@ yarn start
 
 ## Tasks
 
-- [ ] Add check feature with its according update request
-- [ ] Use axios' [instances](https://github.com/axios/axios#creating-an-instance) to clean up requests
-- [ ] Do proper error checking on request
-- [ ] Trust the request and rollback if they don't succeed
-- [ ] Refactor to React [context](https://kentcdodds.com/blog/how-to-use-react-context-effectively/) with its custom `useTasks` hook. 
+You will find the solutions of these tasks in different branches.
+
+1. Add check feature with its according update request
+2. Use axios' [instances](https://github.com/axios/axios#creating-an-instance) to clean up requests
+3. Do proper error checking on request
+4. Trust the request and rollback if they don't succeed
+5. Refactor to React [context](https://kentcdodds.com/blog/how-to-use-react-context-effectively/) with its custom `useTasks` hook. 
 
 That way we can make our components more isolated. Going from this:
 
@@ -59,4 +61,4 @@ export const Controls = () => {
 };
 ```
 
-- [ ] Use some cool react data fetching library such as [react-query](https://github.com/tannerlinsley/react-query) or [swr](https://github.com/vercel/swr)
+6. Use some cool react data fetching library such as [react-query](https://github.com/tannerlinsley/react-query) or [swr](https://github.com/vercel/swr)
