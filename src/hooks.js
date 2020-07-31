@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { v4 } from "uuid";
 
-const API_TODO = 'https://jsonplaceholder.typicode.com/todos';
+const api = axios.create({
+    baseURL: 'https://jsonplaceholder.typicode.com'
+})
 
 export const useTasks = ({ offset = 5 }) => {
     const [tasks, setTasks] = useState([]);
     const [page, setPage] = useState(0);
 
     useEffect(() => {
-        axios.get(API_TODO, {
+        api.get('/todos', {
             params: {
                 _start: page,
                 _limit: offset,
@@ -25,17 +27,23 @@ export const useTasks = ({ offset = 5 }) => {
             completed: false
         }
 
-        await axios.post(API_TODO, data)
+        await api.post('/todos', data)
         setTasks([...tasks, data])
     };
 
     const removeTask = async (id) => {
-        await axios.delete(`${API_TODO}/${id}`);
+        await api.delete(`/todos/${id}`);
         setTasks(tasks.filter((task) => task.id !== id));
     };
 
     const loadMore = async () => {
-        const { data } = await axios.get(API_TODO + `?_start=${page + offset}&_limit=${offset}`);
+        const { data } = await api.get('/todos', {
+            params: {
+                _start: page + offset,
+                _limit: offset,
+            }
+        });
+
         setTasks([...tasks, ...data])
         setPage(page + 5);
     };
