@@ -6,7 +6,7 @@ const api = axios.create({
     baseURL: 'https://jsonplaceholder.typicode.com'
 })
 
-export const useTasks = ({ offset = 5 }) => {
+export const useTasks = ({ offset } = { offset: 5 }) => {
     const [tasks, setTasks] = useState([]);
     const [page, setPage] = useState(0);
 
@@ -17,7 +17,7 @@ export const useTasks = ({ offset = 5 }) => {
                 _limit: offset,
             }
         })
-        .then(res => setTasks(res.data));
+            .then(res => setTasks(res.data));
     }, []);
 
     const addTask = async (title) => {
