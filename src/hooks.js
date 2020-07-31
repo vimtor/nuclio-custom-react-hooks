@@ -27,24 +27,31 @@ export const useTasks = ({ offset = 5 }) => {
     }, []);
 
     const addTask = async (title) => {
+        const id = v4();
         const data = {
-            id: v4(),
+            id,
             title,
             completed: false
         }
 
+        setTasks([...tasks, data])
+
         const { status } = await axios.post(API_TODO, data)
 
-        if (status === 201) {
-            setTasks([...tasks, data])
+        if (status !== 201) {
+            setTasks(tasks.filter((task) => task.id !== id));
         }
     };
 
     const removeTask = async (id) => {
+        const task = tasks.find(task => task.id === id);
+        const newTasks = tasks.filter((task) => task.id !== id);
+        setTasks(newTasks);
+
         const { status } = await axios.delete(`${API_TODO}/${id}`);
 
-        if (status === 200) {
-            setTasks(tasks.filter((task) => task.id !== id));
+        if (status !== 200) {
+            setTasks([...newTasks, task]);
         }
     };
 
